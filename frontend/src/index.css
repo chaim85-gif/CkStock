@@ -2,14 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ======================================
+   CkStock Design System — CSS Variables
+   ====================================== */
+
+/* Light Mode (default) */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --color-muted: #F1F5F9;
+  --color-muted-foreground: #64748B;
+
+  --color-primary: #2563EB;
+  --color-primary-foreground: #FFFFFF;
+  --color-primary-light: #DBEAFE;
+  --color-primary-dark: #1D4ED8;
+
+  --color-success: #059669;
+  --color-success-foreground: #FFFFFF;
+  --color-success-light: #D1FAE5;
+
+  --color-warning: #D97706;
+  --color-warning-foreground: #FFFFFF;
+  --color-warning-light: #FEF3C7;
+
+  --color-danger: #E11D48;
+  --color-danger-foreground: #FFFFFF;
+  --color-danger-light: #FFE4E6;
+
+  --color-accent-purple: #7C3AED;
+  --color-accent-cyan: #06B6D4;
+  --color-accent-pink: #EC4899;
+
+  --color-border: #E2E8F0;
+  --color-border-light: #F1F5F9;
+  --color-ring: rgba(37, 99, 235, 0.3);
+
+  /* Glass effects (light) */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-stroke: rgba(255, 255, 255, 0.8);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+
+  /* Neumorphism base (light) */
+  --neu-base-bg: #E8ECF0;
+  --neu-shadow-light: #FFFFFF;
+  --neu-shadow-dark: #C8CED4;
+}
+
+/* Dark Mode */
+.dark {
+  --color-background: #0A0E17;
+  --color-foreground: #E8EDF5;
+  --color-muted: #131A26;
+  --color-muted-foreground: #8896A6;
+
+  --color-primary: #3B82F6;
+  --color-primary-foreground: #FFFFFF;
+  --color-primary-light: #1E3A5F;
+  --color-primary-dark: #2563EB;
+
+  --color-success: #10B981;
+  --color-success-foreground: #FFFFFF;
+  --color-success-light: #064E3B;
+
+  --color-warning: #F59E0B;
+  --color-warning-foreground: #FFFFFF;
+  --color-warning-light: #78350F;
+
+  --color-danger: #F43F5E;
+  --color-danger-foreground: #FFFFFF;
+  --color-danger-light: #4C0519;
+
+  --color-accent-purple: #8B5CF6;
+  --color-accent-cyan: #22D3EE;
+  --color-accent-pink: #F472B6;
+
+  --color-border: #1E293B;
+  --color-border-light: #1A2332;
+  --color-ring: rgba(59, 130, 246, 0.4);
+
+  /* Glass effects (dark) */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-stroke: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.04);
+
+  /* Neumorphism base (dark) */
+  --neu-base-bg: #0F1622;
+  --neu-shadow-light: #1A2332;
+  --neu-shadow-dark: #080C14;
+}
+
+/* ======================================
+   Base Styles
+   ====================================== */
+
+html {
+  font-family: 'Inter', 'Noto Sans Hebrew', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color: #111827;
-  background-color: #ffffff;
-
+  color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -18,11 +109,154 @@
 
 body {
   margin: 0;
-  display: flex;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   width: 100%;
+}
+
+/* Smooth transition for theme switching */
+*,
+*::before,
+*::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ======================================
+   Glassmorphism Utility Classes
+   ====================================== */
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid var(--glass-stroke);
+  }
+
+  .glass-sm {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px) saturate(160%);
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    border: 1px solid var(--glass-stroke);
+  }
+
+  .glass-lg {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid var(--glass-stroke);
+  }
+
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid var(--glass-stroke);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.5);
+    border-radius: 1rem;
+  }
+
+  .dark .glass-card {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Neumorphism */
+  .neu {
+    background: var(--neu-base-bg);
+    box-shadow: 5px 5px 12px var(--neu-shadow-dark), -5px -5px 12px var(--neu-shadow-light);
+    border-radius: 1rem;
+  }
+
+  .neu-sm {
+    background: var(--neu-base-bg);
+    box-shadow: 3px 3px 6px var(--neu-shadow-dark), -3px -3px 6px var(--neu-shadow-light);
+    border-radius: 0.75rem;
+  }
+
+  .neu-lg {
+    background: var(--neu-base-bg);
+    box-shadow: 8px 8px 20px var(--neu-shadow-dark), -8px -8px 20px var(--neu-shadow-light);
+    border-radius: 1.5rem;
+  }
+
+  .neu-inset {
+    background: var(--neu-base-bg);
+    box-shadow: inset 3px 3px 6px var(--neu-shadow-dark), inset -3px -3px 6px var(--neu-shadow-light);
+    border-radius: 0.75rem;
+  }
+
+  .neu-pressed {
+    background: var(--neu-base-bg);
+    box-shadow: inset 2px 2px 5px var(--neu-shadow-dark), inset -2px -2px 5px var(--neu-shadow-light);
+    border-radius: 0.75rem;
+  }
+
+  /* Glass + Neumorphism hybrid */
+  .glass-neu {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px) saturate(170%);
+    -webkit-backdrop-filter: blur(12px) saturate(170%);
+    box-shadow: 5px 5px 12px var(--neu-shadow-dark), -5px -5px 12px var(--neu-shadow-light);
+    border: 1px solid var(--glass-stroke);
+    border-radius: 1rem;
+  }
+
+  /* Gradient accents */
+  .gradient-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent-purple));
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+  }
+
+  .gradient-warm {
+    background: linear-gradient(135deg, var(--color-accent-pink), var(--color-warning));
+  }
+
+  /* Glow rings */
+  .ring-glow {
+    box-shadow: 0 0 0 2px var(--color-ring);
+  }
+
+  .ring-glow-primary {
+    box-shadow: 0 0 0 2px var(--color-primary), 0 0 12px rgba(37, 99, 235, 0.25);
+  }
+}
+
+/* ======================================
+   Scrollbar Styling
+   ====================================== */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+}
+
+/* ======================================
+   Selection
+   ====================================== */
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
 }

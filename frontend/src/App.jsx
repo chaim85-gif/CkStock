@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './layout/Layout';
 import Dashboard from './pages/Dashboard';
+import Inventory from './pages/Inventory';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 import PriceComparison from './pages/PriceComparison';
 import AddProduct from './pages/AddProduct';
 import Login from './pages/Login';
@@ -30,6 +33,9 @@ function App() {
           
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/pricing" element={<PriceComparison />} />
             <Route path="/add-product" element={<AddProduct />} />
           </Route>
