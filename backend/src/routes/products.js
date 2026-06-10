@@ -18,7 +18,7 @@ function esc(val) {
 router.get('/', (req, res) => {
   try {
     const products = query(
-      `SELECT id, name, category, quantity, unit, status, expiry_date, created_at
+      `SELECT id, name, category, quantity, unit, status, expiry_date, price, created_at
        FROM products
        WHERE tenant_id = ${esc(req.tenantId)}
        ORDER BY created_at DESC`
@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
  */
 router.post('/', (req, res) => {
   try {
-    const { name, category, quantity, unit, expiry_date } = req.body;
+    const { name, category, quantity, unit, expiry_date, price } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ message: 'נא להזין שם מוצר' });
@@ -45,6 +45,7 @@ router.post('/', (req, res) => {
 
     const id = crypto.randomUUID();
     const qty = parseInt(quantity, 10) || 0;
+    const itemPrice = parseFloat(price) || 0;
     const units = unit || 'יחידה';
 
     // Auto-determine status based on quantity
@@ -52,12 +53,12 @@ router.post('/', (req, res) => {
     const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
     query(
-      `INSERT INTO products (id, name, category, quantity, unit, status, expiry_date, tenant_id, created_at)
-       VALUES (${esc(id)}, ${esc(name.trim())}, ${esc(category || '')}, ${qty}, ${esc(units)}, ${esc(status)}, ${esc(expiry_date || '')}, ${esc(req.tenantId)}, ${esc(now)})`
+      `INSERT INTO products (id, name, category, quantity, unit, status, expiry_date, price, tenant_id, created_at)
+       VALUES (${esc(id)}, ${esc(name.trim())}, ${esc(category || '')}, ${qty}, ${esc(units)}, ${esc(status)}, ${esc(expiry_date || '')}, ${itemPrice}, ${esc(req.tenantId)}, ${esc(now)})`
     );
 
     const product = query(
-      `SELECT id, name, category, quantity, unit, status, expiry_date, created_at
+      `SELECT id, name, category, quantity, unit, status, expiry_date, price, created_at
        FROM products WHERE id = ${esc(id)}`
     );
 
@@ -75,7 +76,7 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   try {
     const { id } = req.params;
-    const { name, category, quantity, unit, status, expiry_date } = req.body;
+    const { name, category, quantity, unit, status, expiry_date, price } = req.body;
 
     // Verify product exists and belongs to tenant
     const existing = query(
@@ -99,6 +100,7 @@ router.put('/:id', (req, res) => {
     if (unit !== undefined) updates.push(`unit = ${esc(unit)}`);
     if (status !== undefined) updates.push(`status = ${esc(status)}`);
     if (expiry_date !== undefined) updates.push(`expiry_date = ${esc(expiry_date)}`);
+    if (price !== undefined) updates.push(`price = ${parseFloat(price) || 0}`);
 
     if (updates.length > 0) {
       query(
@@ -107,7 +109,7 @@ router.put('/:id', (req, res) => {
     }
 
     const product = query(
-      `SELECT id, name, category, quantity, unit, status, expiry_date, created_at
+      `SELECT id, name, category, quantity, unit, status, expiry_date, price, created_at
        FROM products WHERE id = ${esc(id)}`
     );
 
